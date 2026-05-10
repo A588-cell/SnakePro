@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "810812041419",
+    "firebase_url": "https://snakeprogame-bf1de-default-rtdb.firebaseio.com",
+    "project_id": "snakeprogame-bf1de",
+    "storage_bucket": "snakeprogame-bf1de.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:810812041419:android:0cdc782dc2ef410cdf534e",
+        "android_client_info": {
+          "package_name": "com.example.fbrecordssingletone"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBG7GfXPNZ8lkkMRru3Beq6Dj9A0OJQ15o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:810812041419:android:9f3803f86d901e37df534e",
+        "android_client_info": {
+          "package_name": "com.example.snakeprogame"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBG7GfXPNZ8lkkMRru3Beq6Dj9A0OJQ15o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

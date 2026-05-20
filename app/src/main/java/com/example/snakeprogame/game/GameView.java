@@ -9,15 +9,15 @@ import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class GameView extends View {
+import com.example.snakeprogame.GameActivity;
 
-    public interface GameOverListener {
-        void onGameOver(int score);
-    }
+public class GameView extends View {
 
     private final BoardGame boardGame;
     private final Paint paint = new Paint();
     private final Handler handler = new Handler(Looper.getMainLooper());
+
+    private GameActivity gameActivity;
 
     private final int TICK_MS = 160;
     private boolean scoreSaved = false;
@@ -25,9 +25,8 @@ public class GameView extends View {
     private float cellSize;
     private float offsetX;
     private float offsetY;
-    private float touchStartX, touchStartY;
 
-    private GameOverListener listener;
+    private float touchStartX, touchStartY;
 
     private final Runnable tick = new Runnable() {
         @Override
@@ -38,9 +37,7 @@ public class GameView extends View {
 
             if (gm.isGameOver() && !scoreSaved) {
                 scoreSaved = true;
-                if (listener != null) {
-                    listener.onGameOver(gm.getScore());
-                }
+                gameActivity.saveScore(gm.getScore());
             }
 
             invalidate();
@@ -48,15 +45,19 @@ public class GameView extends View {
         }
     };
 
-    public GameView(Context context, GameOverListener listener) {
+    public GameView(Context context) {
         super(context);
-        this.listener = listener;
+
+        gameActivity = (GameActivity) context;
         boardGame = new BoardGame();
+
         handler.postDelayed(tick, TICK_MS);
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+
         float cellW = (float) w / GameModule.COLS;
         float cellH = (float) h / GameModule.ROWS;
         cellSize = Math.min(cellW, cellH);
@@ -76,45 +77,80 @@ public class GameView extends View {
 
         canvas.drawColor(Color.rgb(10, 10, 14));
 
+        // Board border
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(Color.rgb(60, 60, 80));
         paint.setStrokeWidth(4);
-        canvas.drawRect(offsetX, offsetY,
+        canvas.drawRect(
+                offsetX,
+                offsetY,
                 offsetX + cellSize * GameModule.COLS,
-                offsetY + cellSize * GameModule.ROWS, paint);
+                offsetY + cellSize * GameModule.ROWS,
+                paint
+        );
 
+        // Fruit
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.RED);
+
         float fx = offsetX + gm.getFruit().getX() * cellSize;
         float fy = offsetY + gm.getFruit().getY() * cellSize;
-        canvas.drawRoundRect(fx, fy, fx + cellSize, fy + cellSize, 12, 12, paint);
 
+        canvas.drawRoundRect(
+                fx,
+                fy,
+                fx + cellSize,
+                fy + cellSize,
+                12,
+                12,
+                paint
+        );
+
+        // Snake
         for (int i = 0; i < gm.getSnake().getBody().size(); i++) {
             SnakePart part = gm.getSnake().getBody().get(i);
 
             float x = offsetX + part.getX() * cellSize;
             float y = offsetY + part.getY() * cellSize;
 
-            if (i == 0) paint.setColor(Color.rgb(0, 255, 140));
-            else paint.setColor(Color.rgb(0, 200, 110));
+            if (i == 0) {
+                paint.setColor(Color.rgb(0, 255, 140));
+            } else {
+                paint.setColor(Color.rgb(0, 200, 110));
+            }
 
-            canvas.drawRoundRect(x, y, x + cellSize, y + cellSize, 14, 14, paint);
+            canvas.drawRoundRect(
+                    x,
+                    y,
+                    x + cellSize,
+                    y + cellSize,
+                    14,
+                    14,
+                    paint
+            );
         }
 
+        // Score
+        paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.WHITE);
         paint.setTextSize(42);
         paint.setFakeBoldText(true);
         canvas.drawText("Score: " + gm.getScore(), 30, 60, paint);
 
+        // Game Over
         if (gm.isGameOver()) {
+            paint.setFakeBoldText(false);
+
             paint.setColor(Color.argb(200, 0, 0, 0));
             canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
 
             paint.setColor(Color.WHITE);
             paint.setTextSize(70);
+            paint.setFakeBoldText(true);
             canvas.drawText("GAME OVER", getWidth() / 2f - 190, getHeight() / 2f, paint);
 
             paint.setTextSize(40);
+            paint.setFakeBoldText(false);
             canvas.drawText("Tap to restart", getWidth() / 2f - 140, getHeight() / 2f + 70, paint);
         }
     }
@@ -132,6 +168,7 @@ public class GameView extends View {
                 scoreSaved = false;
                 return true;
             }
+
             return true;
         }
 
@@ -140,12 +177,19 @@ public class GameView extends View {
             float dy = event.getY() - touchStartY;
 
             if (Math.abs(dx) > Math.abs(dy)) {
-                if (dx > 50) gm.setDirection(GameModule.DIR_RIGHT);
-                else if (dx < -50) gm.setDirection(GameModule.DIR_LEFT);
+                if (dx > 50) {
+                    gm.setDirection(GameModule.DIR_RIGHT);
+                } else if (dx < -50) {
+                    gm.setDirection(GameModule.DIR_LEFT);
+                }
             } else {
-                if (dy > 50) gm.setDirection(GameModule.DIR_DOWN);
-                else if (dy < -50) gm.setDirection(GameModule.DIR_UP);
+                if (dy > 50) {
+                    gm.setDirection(GameModule.DIR_DOWN);
+                } else if (dy < -50) {
+                    gm.setDirection(GameModule.DIR_UP);
+                }
             }
+
             return true;
         }
 

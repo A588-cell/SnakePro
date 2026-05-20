@@ -23,11 +23,10 @@ public class GameActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         scoresRef = FirebaseDatabase.getInstance().getReference("scores");
 
-        GameView gameView = new GameView(this, score -> saveScore(score));
-        setContentView(gameView);
+        setContentView(new GameView(this));
     }
 
-    private void saveScore(int score) {
+    public void saveScore(int score) {
         FirebaseUser user = mAuth.getCurrentUser();
 
         if (user == null) {
@@ -50,6 +49,8 @@ public class GameActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(this, "Score saved only if it is a new record", Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                Toast.makeText(this, "Failed to check score", Toast.LENGTH_SHORT).show();
             }
         });
     }

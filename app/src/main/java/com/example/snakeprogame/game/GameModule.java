@@ -40,18 +40,26 @@ public class GameModule {
     public boolean isGameOver() { return gameOver; }
 
     public void setDirection(int newDir) {
-        // לא מאפשרים "היפוך" (כדי שלא ייכנס לעצמו מיד)
-        if ((direction == DIR_UP && newDir == DIR_DOWN) ||
-                (direction == DIR_DOWN && newDir == DIR_UP) ||
-                (direction == DIR_LEFT && newDir == DIR_RIGHT) ||
-                (direction == DIR_RIGHT && newDir == DIR_LEFT)) {
+        // מניעת פנייה של 180 מעלות (הפוך מהכיוון הנוכחי)
+        if (direction == DIR_UP && newDir == DIR_DOWN) {
+            return;
+        }
+        if (direction == DIR_DOWN && newDir == DIR_UP) {
+            return;
+        }
+        if (direction == DIR_LEFT && newDir == DIR_RIGHT) {
+            return;
+        }
+        if (direction == DIR_RIGHT && newDir == DIR_LEFT) {
             return;
         }
         direction = newDir;
     }
 
     public void update() {
-        if (gameOver) return;
+        if (gameOver == true) {
+            return;
+        }
 
         int headX = snake.getHead().getX();
         int headY = snake.getHead().getY();
@@ -59,12 +67,17 @@ public class GameModule {
         int newX = headX;
         int newY = headY;
 
-        if (direction == DIR_UP) newY--;
-        else if (direction == DIR_RIGHT) newX++;
-        else if (direction == DIR_DOWN) newY++;
-        else if (direction == DIR_LEFT) newX--;
+        if (direction == DIR_UP) {
+            newY = newY - 1;
+        } else if (direction == DIR_RIGHT) {
+            newX = newX + 1;
+        } else if (direction == DIR_DOWN) {
+            newY = newY + 1;
+        } else if (direction == DIR_LEFT) {
+            newX = newX - 1;
+        }
 
-        // קיר = Game Over
+        // בדיקה אם הנחש יצא מגבולות הלוח (קיר)
         if (newX < 0 || newX >= COLS || newY < 0 || newY >= ROWS) {
             gameOver = true;
             return;
@@ -72,27 +85,27 @@ public class GameModule {
 
         snake.moveTo(newX, newY);
 
-        // התנגש בעצמו
-        if (snake.hitsItself()) {
+        // בדיקה אם הנחש התנגש בעצמו
+        if (snake.hitsItself() == true) {
             gameOver = true;
             return;
         }
 
-        // אכל פרי
+        // בדיקה אם הנחש אכל את הפרי
         if (newX == fruit.getX() && newY == fruit.getY()) {
-            score += 10;
+            score = score + 10;
             snake.grow();
             spawnFruit();
         }
     }
 
-    private void spawnFruit()
-    {
+    private void spawnFruit() {
         while (true) {
             int x = random.nextInt(COLS);
             int y = random.nextInt(ROWS);
 
             boolean onSnake = false;
+            // לולאה פשוטה לבדיקה אם המיקום החדש תפוס על ידי הנחש
             for (int i = 0; i < snake.getBody().size(); i++) {
                 SnakePart p = snake.getBody().get(i);
                 if (p.getX() == x && p.getY() == y) {
@@ -100,7 +113,8 @@ public class GameModule {
                     break;
                 }
             }
-            if (!onSnake) {
+
+            if (onSnake == false) {
                 fruit = new Fruit(x, y);
                 return;
             }

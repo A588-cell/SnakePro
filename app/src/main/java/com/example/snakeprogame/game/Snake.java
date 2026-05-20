@@ -3,7 +3,7 @@ package com.example.snakeprogame.game;
 import java.util.ArrayList;
 
 public class Snake {
-    private final ArrayList<SnakePart> body = new ArrayList<>();
+    private ArrayList<SnakePart> body = new ArrayList<>();
     private boolean shouldGrow = false;
 
     public Snake(int startX, int startY) {
@@ -16,7 +16,8 @@ public class Snake {
         return body;
     }
 
-    public SnakePart getHead() {
+    public SnakePart
+    getHead() {
         return body.get(0);
     }
 

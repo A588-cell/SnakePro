@@ -40,7 +40,7 @@ public class GameView extends View {
                 gameActivity.saveScore(gm.getScore());
             }
 
-            invalidate();
+            invalidate();  // refresh the screen
             handler.postDelayed(this, TICK_MS);
         }
     };

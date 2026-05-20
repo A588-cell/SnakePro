@@ -86,13 +86,15 @@ public class GameModule {
         }
     }
 
-    private void spawnFruit() {
+    private void spawnFruit()
+    {
         while (true) {
             int x = random.nextInt(COLS);
             int y = random.nextInt(ROWS);
 
             boolean onSnake = false;
-            for (SnakePart p : snake.getBody()) {
+            for (int i = 0; i < snake.getBody().size(); i++) {
+                SnakePart p = snake.getBody().get(i);
                 if (p.getX() == x && p.getY() == y) {
                     onSnake = true;
                     break;

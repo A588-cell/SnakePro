@@ -24,6 +24,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
+        
+        // התנתקות אוטומטית בכל פתיחה של האפליקציה כדי להתחיל "נקי"
+        if (mAuth.getCurrentUser() != null) {
+            mAuth.signOut();
+        }
 
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);

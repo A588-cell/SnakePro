@@ -23,16 +23,19 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // אתחול Firebase
+        // אתחול כלי האימות של Firebase (זיהוי משתמשים)
         mAuth = FirebaseAuth.getInstance();
+        
+        // יצירת קישור לתיקיית "scores" במסד הנתונים של Firebase
         scoresRef = FirebaseDatabase.getInstance().getReference("scores");
 
-        // יצירת תצוגת המשחק והצגתה
+        // יצירת תצוגת המשחק (הנחש והלוח) והצגתה על המסך
         GameView gameView = new GameView(this);
         setContentView(gameView);
     }
 
     public void saveScore(int score) {
+        // בדיקה האם יש משתמש שמחובר כרגע למערכת
         FirebaseUser user = mAuth.getCurrentUser();
 
         if (user == null) {
@@ -43,12 +46,16 @@ public class GameActivity extends AppCompatActivity {
         String uid = user.getUid();
         String email = user.getEmail();
 
-        // בדיקה האם הציון הנוכחי גבוה מהשיא הקיים במסד הנתונים
+        // שליפת הניקוד הקיים ובדיקה מתי הפעולה מסתיימת
         scoresRef.child(uid).child("score").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
+                // בדיקה האם הפעולה מול Firebase הצליחה
                 if (task.isSuccessful()) {
+                    // קבלת צילום מצב של הנתונים שחזרו
                     DataSnapshot snapshot = task.getResult();
+                    
+                    // המרת הנתון  למספר שלם (Integer) ב-Java
                     Integer oldScore = snapshot.getValue(Integer.class);
 
                     // אם אין ניקוד קודם או שהניקוד הנוכחי גבוה יותר, נעדכן את ה-Firebase

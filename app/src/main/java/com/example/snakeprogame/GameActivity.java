@@ -39,7 +39,7 @@ public class GameActivity extends AppCompatActivity {
         FirebaseUser user = mAuth.getCurrentUser();
 
         if (user == null) {
-            Toast.makeText(this, "עליך להתחבר כדי לשמור ניקוד", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "עליך להתחבר כדי שיישמר עבורך ניקוד", Toast.LENGTH_SHORT).show();
             return;
         }
 

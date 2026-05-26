@@ -94,6 +94,13 @@ public class GameModule {
         // בדיקה אם הנחש אכל את הפרי
         if (newX == fruit.getX() && newY == fruit.getY()) {
             score = score + 10;
+            
+            // בדיקה אם המשתמש הגיע לניקוד המקסימלי (ניצחון)
+            if (score >= 5010) {
+                gameOver = true;
+                return;
+            }
+
             snake.grow();
             spawnFruit();
         }

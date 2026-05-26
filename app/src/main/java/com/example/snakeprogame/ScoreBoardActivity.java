@@ -48,28 +48,33 @@ public class ScoreBoardActivity extends AppCompatActivity {
         loadScores();
     }
 
-    
+
     private void loadScores() {
+        // שליחת בקשה לקבלת הנתונים מהענן
         scoresRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
+                    // יצירת רשימה זמנית לאחסון התוצאות שנחלץ
                     ArrayList<PlayerScore> scores = new ArrayList<PlayerScore>();
 
-                    // מעבר על כל המשתמשים שקיימים במסד הנתונים
+                    // מעבר בלולאה על כל רשומה בתוך התוצאה שחזרה
                     for (DataSnapshot snapshot : task.getResult().getChildren()) {
+                        // חילוץ האימייל והניקוד מתוך הרשומה
                         String email = snapshot.child("email").getValue(String.class);
                         Integer scoreValue = snapshot.child("score").getValue(Integer.class);
 
+                        // אם הנתונים קיימים, נוסיף אותם לרשימה שלנו
                         if (email != null && scoreValue != null) {
                             scores.add(new PlayerScore(email, scoreValue));
                         }
                     }
 
-                    // מיון הרשימה מהגבוה לנמוך
+                    // מיון הרשימה מהניקוד הגבוה לנמוך
                     Collections.sort(scores, new Comparator<PlayerScore>() {
                         @Override
                         public int compare(PlayerScore a, PlayerScore b) {
+                            // מחזיר את ההפרש בין ב' ל-א' כדי לקבל סדר יורד
                             return b.score - a.score;
                         }
                     });
@@ -80,19 +85,22 @@ public class ScoreBoardActivity extends AppCompatActivity {
                         return;
                     }
 
-                    // בניית הטקסט להצגה - עד 10 תוצאות בלבד
+                    // בניית הטקסט להצגה סופית על המסך
                     StringBuilder builder = new StringBuilder();
-                    int count = Math.min(scores.size(), 10); // לוקח את הקטן מבין כמות התוצאות לבין 10
+                    
+                    // קביעת כמות השורות שנציג (המקסימום הוא 10)
+                    int count = Math.min(scores.size(), 10);
 
                     for (int i = 0; i < count; i++) {
                         PlayerScore ps = scores.get(i);
 
-                        // קיצור האימייל לשם משתמש בלבד (לפני ה-@)
+                        // חילוץ השם מתוך האימייל (כל מה שלפני ה-@)
                         String name = ps.email;
-                        if (name.contains("@")) {
+                        if (name != null && name.contains("@")) {
                             name = name.substring(0, name.indexOf("@"));
                         }
 
+                        // הוספת שורה לטקסט: מקום, שם וניקוד
                         builder.append(i + 1)
                                 .append(". ")
                                 .append(name)
@@ -101,6 +109,7 @@ public class ScoreBoardActivity extends AppCompatActivity {
                                 .append("\n");
                     }
 
+                    // הצגת כל הטקסט שבנינו בתוך ה-TextView
                     tvScores.setText(builder.toString());
 
                 } else {

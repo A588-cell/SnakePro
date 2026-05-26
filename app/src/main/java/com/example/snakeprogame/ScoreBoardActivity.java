@@ -58,7 +58,7 @@ public class ScoreBoardActivity extends AppCompatActivity {
                     // יצירת רשימה זמנית לאחסון התוצאות שנחלץ
                     ArrayList<PlayerScore> scores = new ArrayList<PlayerScore>();
 
-                    // מעבר בלולאה על כל רשומה בתוך התוצאה שחזרה
+                    // מעבר בלולאה על כל משתמש בתוך התוצאה שחזרה
                     for (DataSnapshot snapshot : task.getResult().getChildren()) {
                         // חילוץ האימייל והניקוד מתוך הרשומה
                         String email = snapshot.child("email").getValue(String.class);

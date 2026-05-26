@@ -2,6 +2,7 @@ package com.example.snakeprogame;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 public class InstructionActivity extends AppCompatActivity {
@@ -11,6 +12,14 @@ public class InstructionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_instruction);
 
         Button btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v -> finish());
+        
+        // הגדרת מאזין
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // סגירת המסך הנוכחי וחזרה למסך הקודם
+                finish();
+            }
+        });
     }
 }

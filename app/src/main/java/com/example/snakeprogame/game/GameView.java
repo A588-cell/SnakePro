@@ -40,7 +40,7 @@ public class GameView extends View {
         }
     };
 
-    public GameView(Context context) {
+    public GameView(Context context) { // מזומן כשלוחצים play
         super(context);
         this.activity = (GameActivity) context;
         this.gm = new GameModule();
@@ -51,7 +51,7 @@ public class GameView extends View {
     // פעולה שרצה כשהמסך משנה גודל (או נפתח לראשונה) - חישוב גודל המשבצות
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {  // כל פעם שהמסך משתנה
-        super.onSizeChanged(w, h, oldw, oldh); // מודד את המידות של המסך
+        super.onSizeChanged(w, h, oldw, oldh);
         float cellW = (float) w / GameModule.COLS;
         float cellH = (float) h / GameModule.ROWS;
         cellSize = Math.min(cellW, cellH); // בחירת הגודל הקטן ביותר כדי שהלוח יהיה ריבועי

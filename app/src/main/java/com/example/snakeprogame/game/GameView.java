@@ -22,7 +22,6 @@ public class GameView extends View {
     private float cellSize; // גודל של משבצת אחת במשחק
     private float offsetX, offsetY; // רווחים מהצדדים כדי שהמשחק יהיה במרכז
     private float touchX, touchY; // מיקום הנגיעה הראשונה במסך לזיהוי החלקה
-    private boolean scoreSaved = false; // משתנה שמוודא שנשמור את הניקוד רק פעם אחת בסוף
 
     // לולאת המשחק - הפעולה הזו רצה שוב ושוב כל 160 מילי-שניות
     private Runnable tick = new Runnable() {
@@ -30,10 +29,7 @@ public class GameView extends View {
         public void run() {
             // אם המשחק נגמר
             if (gm.isGameOver()) {
-                if (scoreSaved == false) {
-                    activity.saveScore(gm.getScore()); // שמירת הניקוד ב-Firebase
-                    scoreSaved = true;
-                }
+                activity.saveScore(gm.getScore()); // שמירת הניקוד ב-Firebase
                 invalidate(); // ציור אחרון להצגת מסך Game Over
                 return;
             }
@@ -54,8 +50,8 @@ public class GameView extends View {
 
     // פעולה שרצה כשהמסך משנה גודל (או נפתח לראשונה) - חישוב גודל המשבצות
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {  // כל פעם שהמסך משתנה
+        super.onSizeChanged(w, h, oldw, oldh); // מודד את המידות של המסך
         float cellW = (float) w / GameModule.COLS;
         float cellH = (float) h / GameModule.ROWS;
         cellSize = Math.min(cellW, cellH); // בחירת הגודל הקטן ביותר כדי שהלוח יהיה ריבועי
@@ -143,7 +139,6 @@ public class GameView extends View {
             // אם המשחק נגמר ונגענו במסך - מתחילים מחדש
             if (gm.isGameOver()) {
                 gm.reset();
-                scoreSaved = false;
                 // עצירת כל לולאה קודמת לפני שמתחילים חדשה כדי למנוע כפילויות וקריסות
                 handler.removeCallbacks(tick);
                 handler.post(tick); // מזמנת את tick מחדש5

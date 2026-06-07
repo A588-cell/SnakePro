@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         // בדיקה האם שדה האימייל ריק
         if (TextUtils.isEmpty(email)) {
             etEmail.setError("נא להזין אימייל"); // הצגת הודעת שגיאה על גבי השדה
-            etEmail.requestFocus(); // העברת המיקוד (סמן) לשדה
+            etEmail.requestFocus();
             return;
         }
 

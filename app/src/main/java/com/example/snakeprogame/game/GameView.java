@@ -15,7 +15,6 @@ public class GameView extends View {
     // gm מכיל את הלוגיקה של המשחק (איפה הנחש, האם הוא אכל תפוח וכו')
     private GameModule gm;
     private Paint paint = new Paint();
-    // handler אחראי על תזמון לולאת המשחק (הזזת הנחש כל כמה זמן)
     private Handler handler = new Handler(Looper.getMainLooper());
     private GameActivity activity;
 
@@ -80,7 +79,7 @@ public class GameView extends View {
                 paint
         );
 
-        //  ציור הפרי (בצבע אדום)
+        //  ציור התפוח
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.RED);
         float fx = offsetX + gm.getFruit().getX() * cellSize;
@@ -88,7 +87,7 @@ public class GameView extends View {
         canvas.drawRoundRect(fx, fy, fx + cellSize, fy + cellSize, 12, 12, paint);
 
         //  ציור הנחש (עוברים על כל חלקי הגוף שלו)
-        for (int i = 0; i < gm.getSnake().getBody().size(); i = i + 1) {
+        for (int i = 0; i < gm.getSnake().getBody().size(); i ++) {
             SnakePart part = gm.getSnake().getBody().get(i);
             float sx = offsetX + part.getX() * cellSize;
             float sy = offsetY + part.getY() * cellSize;

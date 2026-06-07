@@ -112,7 +112,7 @@ public class GameModule {
             int y = random.nextInt(ROWS);
 
             boolean onSnake = false;
-            // לולאה פשוטה לבדיקה אם המיקום החדש תפוס על ידי הנחש
+            // לולאה לבדיקה אם המיקום החדש תפוס על ידי הנחש
             for (int i = 0; i < snake.getBody().size(); i++) {
                 SnakePart p = snake.getBody().get(i);
                 if (p.getX() == x && p.getY() == y) {
